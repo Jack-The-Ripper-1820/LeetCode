@@ -1,0 +1,58 @@
+//fenwick, binary indexed tree
+class NumArray {
+    int n;
+    vector<int> farr;
+    vector<int> nums;
+public:
+    NumArray(vector<int>& nums) {
+        this->nums = nums;
+        this->n = nums.size();
+        
+        if(n == 0)
+            return;
+        
+        farr = vector<int>(n + 1);
+        for(int i = 0; i < n; i++) {
+            farr[i + 1] = farr[i] + nums[i];
+        }
+        for(int i = n; i > 0; i--) {
+            int parent = i - (i & -i);
+            if(parent >= 0)
+                farr[i] -= farr[parent];
+        }
+    }
+    
+    void update(int index, int val) {
+        int delta = val - nums[index];
+        nums[index] = val;
+        increment(index, delta);
+    }
+    
+    void increment(int i, int val) {
+        i += 1;
+        while(i < n + 1) {
+            farr[i] += val;
+            i += (i & -i);
+        }
+    }
+    int sumRange(int left, int right) {
+        return sum(right) - sum(left - 1);
+    }
+    
+    int sum(int i) {
+        int ans = 0;
+        i += 1;
+        while(i > 0) {
+            ans += farr[i];
+            i -= (i & -i);
+        }
+        return ans;
+    }
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray* obj = new NumArray(nums);
+ * obj->update(index,val);
+ * int param_2 = obj->sumRange(left,right);
+ */
