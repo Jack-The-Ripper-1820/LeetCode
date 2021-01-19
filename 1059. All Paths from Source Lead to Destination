@@ -1,0 +1,28 @@
+class Solution {
+public:
+    bool dfs(int source, unordered_map<int, unordered_set<int>> &g, vector<bool> vis, int const& dest) {
+        //cout << source << endl;
+        if(vis[source]) return false;
+        
+        if(g[source].empty() && source != dest)
+            return false;
+        if(source == dest && g[source].empty())
+            return true;
+        
+        vis[source] = true;
+        bool f = true;
+        for(int neigh : g[source]) {
+            //if(vis[neigh]) return false;
+            f = f && dfs(neigh, g, vis, dest);
+        }
+        
+        return f;
+    }
+    bool leadsToDestination(int n, vector<vector<int>>& edges, int source, int destination) {
+        unordered_map<int, unordered_set<int>> g;
+        for(auto &edge : edges)
+            g[edge[0]].insert(edge[1]);
+        vector<bool> vis(n);
+        return dfs(source, g, vis, destination);
+    }
+};
