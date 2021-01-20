@@ -1,0 +1,30 @@
+class Solution {
+public:
+    pair<int, string> helper(string const& s, int left, int right) {
+        while(left >= 0 && right < s.length()) {
+            if(s[left] == s[right]) {
+                left -= 1;
+                right += 1;
+            }
+            else
+                break;
+        }
+        left += 1;
+        right -= 1;
+        return make_pair(right - left + 1, s.substr(left, right - left + 1));
+    }
+    string longestPalindrome(string s) {
+        if(s.empty())
+            return s;
+        
+        int n = s.length(), ansl = 0;
+        pair<int, string> ans, maxs;
+        for(int i = 0; i < n; i++) {
+            auto odd = helper(s, i, i);
+            auto even = helper(s, i, i + 1);
+            maxs = max(odd, even);
+            ans = max(maxs, ans);
+        }
+        return ans.second;
+    }
+};
