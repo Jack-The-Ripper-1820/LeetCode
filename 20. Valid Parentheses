@@ -1,0 +1,19 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> st;
+        unordered_map<char, char> mp = {{'}', '{'}, {']', '['}, {')', '('}};
+        for(char x : s) {
+            st.push(x);
+            if(x == ')' || x == ']' || x == '}') {
+                st.pop();
+                if(st.empty() || st.top() != mp[x])
+                    return false;
+                st.pop();
+            }
+        }
+        if(st.empty())
+            return true;
+        return false;
+    }
+};
