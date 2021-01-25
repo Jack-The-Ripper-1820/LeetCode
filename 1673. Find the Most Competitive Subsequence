@@ -4,7 +4,7 @@ public:
         vector<int> ans;
         int n = nums.size();
         for(int i = 0; i < n; i++) {
-            while(!ans.empty() && ans.back() > nums[i]) {
+            while(!ans.empty() && ans.back() > nums[i]) { // if last element in ans is greater than the cur nums element, we have an opportunity to replace it
                 if(n - i > k - ans.size()) //if there are more numbers than slots available implies we might have better choice
                     ans.pop_back();
                 else
