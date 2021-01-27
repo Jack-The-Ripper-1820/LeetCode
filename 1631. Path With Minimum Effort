@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int minimumEffortPath(vector<vector<int>>& heights) {
+        #djikstra algo using priority queue and dp array for storing min effort
+        int m = heights.size(), n = heights[0].size();
+        
+        set<pair<int, int>> vis;
+        vector<vector<int>> dp(m, vector<int>(n, INT_MAX));
+        dp[0][0] = 0;
+        
+        vector<pair<int, int>> dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
+        pq.push({0, 0, 0});
+        
+        auto bound = [&](int &x, int &y) {
+            return x >= 0 && x < m && y >= 0 && y < n;
+        };
+        
+        while(!pq.empty()) {
+            int min_eff = pq.top()[0], i = pq.top()[1], j = pq.top()[2];
+            vis.insert(make_pair(i, j));
+            pq.pop();
+            
+            for(auto &dir : dirs) {
+                int di = dir.first + i, dj = dir.second + j;
+                
+                if(bound(di, dj) && vis.find(make_pair(di, dj)) == vis.end()) {
+                    int cur_max_diff = max(min_eff, abs(heights[i][j] - heights[di][dj]));
+                    if(cur_max_diff < dp[di][dj]) {
+                        dp[di][dj] = cur_max_diff;
+                        pq.push({cur_max_diff, di, dj});
+                    }
+                }
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+};
