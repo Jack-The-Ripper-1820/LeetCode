@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int helper(vector<int> const& prices, int ind, int todo, vector<vector<int>> &dp) {
+        if(ind >= prices.size())
+            return 0;
+        
+        if(dp[ind][todo] != INT_MIN)
+            return dp[ind][todo];
+        
+        int buy = 0;
+        if(todo == 0)
+            buy = helper(prices, ind + 1, 1, dp) - prices[ind];
+        else
+            buy = helper(prices, ind + 2, 0, dp) + prices[ind];
+        
+        int dbuy = helper(prices, ind + 1, todo, dp);
+        return dp[ind][todo] = max(buy, dbuy);
+    }
+    int maxProfit(vector<int>& prices) {
+        vector<vector<int>> dp(prices.size(), vector<int>(2, INT_MIN));
+        return helper(prices, 0, 0, dp);
+    }
+};
