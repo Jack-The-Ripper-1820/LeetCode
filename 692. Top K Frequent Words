@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        unordered_map<string, int> mp;
+        
+        priority_queue<pair<int, string>> pq;
+        for(string &x : words)
+            mp[x]++;
+        
+        for(auto i = mp.begin(); i != mp.end(); i++) {
+            pq.push(make_pair(-i->second, i->first)); //minimum count at top
+            if(pq.size() > k)
+                pq.pop(); //minimum count removed
+        }
+        
+        vector<string> ans;
+        for(int i = 0; i < k; i++) {
+            ans.push_back(pq.top().second);
+            pq.pop();
+        }
+        
+        reverse(ans.begin(), ans.end()); //maximum at bottom
+        return ans;
+    }
+};
