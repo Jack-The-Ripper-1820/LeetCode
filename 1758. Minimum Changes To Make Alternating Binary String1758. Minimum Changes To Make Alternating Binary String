@@ -1,0 +1,21 @@
+class Solution {
+    int helper(string &s) {
+        int ans = 0;
+        for(int i = 1; i < s.length(); i++) {
+            if(s[i] == s[i - 1]) {
+                ans += 1;
+                s[i] = s[i - 1] == '0' ? '1' : '0';
+            }
+        }
+        return ans;
+    }
+public:
+    int minOperations(string s) {
+        string a = s, b = s;
+        int c1 = a[0] == '1' ? 1 : 0;
+        int c2 = b[0] == '0' ? 1 : 0;
+        a[0] = '0';
+        b[0] = '1';
+        return min(c1 + helper(a), c2 + helper(b));
+    }
+};
