@@ -1,3 +1,4 @@
+//initial solution
 class Solution {
 public:
     int minimumLengthEncoding(vector<string>& words) {
@@ -34,5 +35,25 @@ public:
         }
         
         return ans;
+    }
+};
+
+//optimised solution
+class Solution {
+public:
+    int minimumLengthEncoding(vector<string>& words) {
+        auto comp = [&](string &a, string &b) {
+            return a.length() > b.length();
+        };
+        
+        sort(words.begin(), words.end(), comp);
+        string ans = words[0] + "#";
+        
+        for(int i = 1; i < words.size(); i++) {
+            if(ans.find(words[i] + "#") == -1)
+                ans += words[i] + "#";
+        }
+        
+        return ans.length();
     }
 };
