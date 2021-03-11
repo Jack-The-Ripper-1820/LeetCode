@@ -1,0 +1,25 @@
+class Solution {
+    vector<vector<int>> dp;
+    int helper(vector<int> const& coins, int amount, int ind, int sel) {
+        if(amount == 0)
+            return 0;
+        
+        if(amount < 0 || ind == coins.size())
+            return INT_MAX / 2;
+        
+        if(dp[ind][amount] != -1)
+            return dp[ind][amount];
+        
+        return dp[ind][amount] = min(1 + helper(coins, amount - coins[ind], ind + 1, sel + 1), min(1 + helper(coins, amount - coins[ind], ind, sel + 1), helper(coins, amount, ind + 1, sel)));
+    }
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        if(amount == 0)
+            return 0;
+        
+        dp = vector<vector<int>>(coins.size(), vector<int>(amount + 1, -1));
+        int ans = helper(coins, amount, 0, 0);
+        
+        return ans >= INT_MAX / 2 ? -1 : ans;
+    }
+};
