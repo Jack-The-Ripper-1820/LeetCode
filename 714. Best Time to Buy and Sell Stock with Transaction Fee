@@ -1,0 +1,20 @@
+class Solution {
+    vector<vector<int>> dp;
+    int helper(vector<int> const& prices, int const& fee, int ind, int opt) {
+        if(ind == prices.size())
+            return 0;
+        
+        if(dp[ind][opt] != -1)
+            return dp[ind][opt];
+        
+        if(opt == 0)
+            return dp[ind][opt] = max(helper(prices, fee, ind + 1, 1) - prices[ind], helper(prices, fee, ind + 1, 0));
+        
+        return dp[ind][opt] = max(helper(prices, fee, ind + 1, 0) + prices[ind] - fee, helper(prices, fee, ind + 1, 1));
+    }
+public:
+    int maxProfit(vector<int>& prices, int fee) {
+        dp = vector<vector<int>>(prices.size(), vector<int>(2, -1));
+        return helper(prices, fee, 0, 0);
+    }
+};
