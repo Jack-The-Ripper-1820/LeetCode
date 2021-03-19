@@ -1,0 +1,27 @@
+class Solution {
+    vector<int> dp;
+    int helper(vector<int> const& nums, int ind, int pd, bool f) {
+        if(ind >= nums.size())
+            return 0;
+        
+        if(dp[ind] != -1)
+            return dp[ind];
+        
+        int ans = 1, cur = nums[ind];
+        for(int i = ind + 1; i < nums.size(); i++) {
+            if(f && nums[i] - cur != 0)
+                ans = max(ans, helper(nums, i, nums[i] - cur, false) + 1);
+            else if(pd * (nums[i] - cur) < 0)
+                ans = max(ans, helper(nums, i, nums[i] - cur, f) + 1);
+        }
+        return dp[ind] = ans;
+    }
+public:
+    int wiggleMaxLength(vector<int>& nums) {
+        dp = vector<int>(nums.size(), -1);
+        int ans = 1;
+        for(int i = 0; i < nums.size(); i++)
+            ans = max(ans, helper(nums, i, 0, true));
+        return ans;
+    }
+};
