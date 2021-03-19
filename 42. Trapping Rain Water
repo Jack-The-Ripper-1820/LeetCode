@@ -1,21 +1,22 @@
 class Solution {
 public:
     int trap(vector<int>& height) {
-        int left = 0, right = height.size() - 1, lm = 0, rm = 0, ans = 0;
-        while(left < right) {
-            if(height[left] < height[right]) {
-                if(height[left] > lm)
-                    lm = height[left];
+        int l = 0, r = height.size() - 1, ans = 0, lm = 0, rm = 0;
+        while(l < r) {
+            if(height[l] < height[r]) {
+                if(height[l] > lm)
+                    lm = height[l];
                 else
-                    ans += lm - height[left];
-                left += 1;
-                continue;
+                    ans += lm - height[l];
+                l++;
             }
-            if(height[right] > rm)
-                rm = height[right];
-            else
-                ans += rm - height[right];
-            right -= 1;
+            else {
+                if(height[r] > rm)
+                    rm = height[r];
+                else
+                    ans += rm - height[r];
+                r--;
+            }
         }
         return ans;
     }
