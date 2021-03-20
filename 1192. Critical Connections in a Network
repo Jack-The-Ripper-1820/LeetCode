@@ -1,0 +1,46 @@
+class Solution {
+    vector<vector<int>> ans, g;
+    vector<int> low, disc, parent;
+    int time = 0;
+    
+    void dfs(int &node) {
+        if(disc[node] != -1)
+            return;
+        
+        low[node] = time;
+        disc[node] = time++;
+        
+        for(int &neigh : g[node]) {
+            if(disc[neigh] == -1) {
+                parent[neigh] = node;
+                dfs(neigh);
+                
+                low[node] = min(low[neigh], low[node]);
+                if(low[neigh] > disc[node])
+                    ans.push_back({neigh, node});
+            }
+            
+            else if(parent[node] != neigh)
+                low[node] = min(low[node], disc[neigh]);
+        }
+    }
+public:
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        g = vector<vector<int>>(n);
+        for(auto &x : connections) {
+            g[x[0]].push_back(x[1]);
+            g[x[1]].push_back(x[0]);
+        }
+        
+        low = vector<int>(n, -1);
+        disc = vector<int>(n, -1);
+        parent = vector<int>(n, -1);
+        
+        for(int i = 0; i < n; i++) {
+            if(disc[i] == -1)
+                dfs(i);
+        }
+        
+        return ans;
+    }
+};
