@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq(intervals.begin(), intervals.end());
+        vector<vector<int>> ans;
+        
+        while(!pq.empty() && pq.size() > 1) {
+            auto a = pq.top(); pq.pop();
+            auto b = pq.top(); pq.pop();
+            if(b[0] <= a[1])
+                pq.push({a[0], max(a[1], b[1])});
+            
+            else {
+                ans.push_back(a);
+                pq.push(b);
+            }
+        }
+        
+        while(!pq.empty()) {
+            ans.push_back(pq.top());
+            pq.pop();
+        }
+        
+        return ans;
+    }
+};
