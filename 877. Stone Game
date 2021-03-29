@@ -1,0 +1,20 @@
+class Solution {
+    vector<vector<int>> dp;
+    bool helper(vector<int> const& piles, int first, int last) {
+        if(first > last)
+            return 0;
+        
+        if(first == last)
+            return piles[first];
+        
+        if(dp[first][last] != -1)
+            return dp[first][last];
+        
+        return dp[first][last] = max(piles[first] - helper(piles, first + 1, last), piles[last] - helper(piles, first, last - 1));
+    }
+public:
+    bool stoneGame(vector<int>& piles) {
+        dp = vector<vector<int>>(piles.size(), vector<int>(piles.size()));
+        return helper(piles, 0, piles.size() - 1) >= 0;
+    }
+};
