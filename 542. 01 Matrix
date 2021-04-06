@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        
+        int m = matrix.size(), n = matrix[0].size();
+        vector<vector<int>> grid(m, vector<int>(n, INT_MAX));
+        vector<pair<int, int>> dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        
+        auto bound = [&](int x, int y) {
+            return x >= 0 && y >= 0 && x < m && y < n;
+        };
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(matrix[i][j] == 0)
+                    grid[i][j] = 0;
+                
+                else {
+                    queue<pair<int, int>> q;
+                    bool f = false;
+                    q.push(make_pair(i, j));
+                    int dist = 0;
+                    
+                    while(!q.empty()) {
+                        int s = q.size();
+                        while(s--) {
+                            
+                            int x = q.front().first, y = q.front().second;
+                            q.pop();
+                            if(matrix[x][y] == 0) {
+                                f = true;
+                                grid[i][j] = dist;
+                                break;
+                            }
+                            
+                            for(auto &dir : dirs) {
+                                int dx = dir.first + x, dy = dir.second + y;
+                                if(bound(dx, dy))
+                                    q.push(make_pair(dx, dy));
+                            }
+                        }
+                        if(f) break;
+                        dist++;
+                    }
+                }
+            }
+        }
+        return grid;
+    }
+};
