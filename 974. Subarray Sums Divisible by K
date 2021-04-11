@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int subarraysDivByK(vector<int>& A, int K) {
+        vector<int> mp(K); //remainder -> freq
+        mp[0] = 1;
+        int s = 0, ans = 0;
+        
+        for(int &x : A) {
+            s += x;
+            
+            if(K)
+                s %= K;
+            
+            //cout << s << endl;
+            
+            if(s < 0)
+                s += K;
+            
+            ans += mp[s];
+            
+            mp[s]++;
+        }
+        
+        return ans;
+    }
+};
