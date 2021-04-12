@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int maxScore(vector<int>& cardPoints, int k) {
+        int n = cardPoints.size();
+        int end = n - 1, endsum = 0;
+        int start = k - 1, startsum = accumulate(cardPoints.begin(), cardPoints.begin() + k, 0);
+        int ans = startsum;
+        
+        while(start >= 0) {
+            startsum -= cardPoints[start--];
+            endsum += cardPoints[end--];
+            ans = max(ans, startsum + endsum);
+        }
+        
+        return ans;
+    }
+};
