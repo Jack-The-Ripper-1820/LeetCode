@@ -36,15 +36,15 @@ public:
     }
 };
 
-//using inbuilt upper_bound and is_sorted_until
+//simulation using inbuilt upper_bound and is_sorted_until (same as first approach but more concise)
 class Solution {
 public:
     void nextPermutation(vector<int>& nums) {
-        auto ind = is_sorted_until(nums.rbegin(), nums.rend());
+        auto ind = is_sorted_until(nums.rbegin(), nums.rend()); //strictly increasing section from the end is the last permutation of that section
         
-        if (ind != nums.rend())
+        if (ind != nums.rend()) //once a number lesser than previous number is found we swap it with the number greater than it and occurs after that number
             swap(*ind, *upper_bound(nums.rbegin(), ind, *ind));
         
-        reverse(nums.rbegin(), ind);
+        reverse(nums.rbegin(), ind); // then we reverse the perumutation from the end to that index to make it the first/least permuation after swapping the number
     }
 };
