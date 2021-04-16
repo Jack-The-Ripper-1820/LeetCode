@@ -1,20 +1,30 @@
 class Solution {
-    vector<vector<int>> dp;
-    bool helper(vector<int> const& piles, int first, int last) {
-        if(first > last)
+    int dp[100][100];
+    
+    int helper(vector<int> const& piles, int ind, int m) {
+        if(ind >= piles.size())
             return 0;
         
-        if(first == last)
-            return piles[first];
+        if(dp[ind][m] != -1)
+            return dp[ind][m];
         
-        if(dp[first][last] != -1)
-            return dp[first][last];
+        int total = accumulate(piles.begin() + ind, piles.end(), 0);
         
-        return dp[first][last] = max(piles[first] - helper(piles, first + 1, last), piles[last] - helper(piles, first, last - 1));
+        if(piles.size() - ind <= 2*m)
+            return dp[ind][m] = total;
+        
+        int ans = 0;
+        
+        for(int x = 1; x <= 2*m; x++) {
+            int opponent_ans = helper(piles, ind + x, max(m, x));
+            ans = max(ans, total - opponent_ans);
+        }
+        
+        return dp[ind][m] = ans;
     }
 public:
-    bool stoneGame(vector<int>& piles) {
-        dp = vector<vector<int>>(piles.size(), vector<int>(piles.size()));
-        return helper(piles, 0, piles.size() - 1) >= 0;
+    int stoneGameII(vector<int>& piles) {
+        memset(dp, -1, sizeof(dp));
+        return helper(piles, 0, 1);
     }
 };
