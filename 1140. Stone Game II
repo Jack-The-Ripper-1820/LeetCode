@@ -1,28 +1,30 @@
 class Solution {
-    vector<unordered_map<int, int>> dp;
+    int dp[100][100];
     
-    int helper(vector<int> const& arr, int start, int m) {
-        if(start >= arr.size())
+    int helper(vector<int> const& piles, int ind, int m) {
+        if(ind >= piles.size())
             return 0;
         
-        if(arr.size() - start <= 2*m)
-            return accumulate(arr.begin() + start, arr.end(), 0);
+        if(dp[ind][m] != -1)
+            return dp[ind][m];
         
-        if(dp[start].find(m) != dp[start].end())
-            return dp[start][m];
+        int total = accumulate(piles.begin() + ind, piles.end(), 0);
         
-        int ans = 0, total = accumulate(arr.begin() + start, arr.end(), 0);
+        if(piles.size() - ind <= 2*m)
+            return dp[ind][m] = total;
         
-        for(int i = 1; i <= 2 * m; i++) {
-            int op_ans = helper(arr, start + i, max(i, m));
-            ans = max(ans, total - op_ans);
+        int ans = 0;
+        
+        for(int x = 1; x <= 2*m; x++) {
+            int opponent_ans = helper(piles, ind + x, max(m, x));
+            ans = max(ans, total - opponent_ans);
         }
         
-        return dp[start][m] = ans;
+        return dp[ind][m] = ans;
     }
 public:
     int stoneGameII(vector<int>& piles) {
-        dp = vector<unordered_map<int, int>>(piles.size());
+        memset(dp, -1, sizeof(dp));
         return helper(piles, 0, 1);
     }
 };
