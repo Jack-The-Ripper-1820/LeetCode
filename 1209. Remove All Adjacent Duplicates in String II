@@ -21,8 +21,7 @@ public:
         string ans;
         
         while(!st.empty()) {
-            while(st.top().first-- > 0)
-                ans = st.top().second + ans;
+            ans = string(st.top().first, st.top().second) + ans;
             st.pop();
         }
         
