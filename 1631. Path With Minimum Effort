@@ -1,38 +1,35 @@
 class Solution {
 public:
     int minimumEffortPath(vector<vector<int>>& heights) {
-        #djikstra algo using priority queue and dp array for storing min effort
+        vector<pair<int, int>> dirs = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
         int m = heights.size(), n = heights[0].size();
         
-        set<pair<int, int>> vis;
         vector<vector<int>> dp(m, vector<int>(n, INT_MAX));
         dp[0][0] = 0;
+        vector<vector<bool>> vis(m, vector<bool>(n));
         
-        vector<pair<int, int>> dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
+        priority_queue<tuple<int, int, int>, vector<tuple<int, int, int>>, greater<tuple<int, int, int>>> pq;
         pq.push({0, 0, 0});
         
-        auto bound = [&](int &x, int &y) {
-            return x >= 0 && x < m && y >= 0 && y < n;
-        };
-        
         while(!pq.empty()) {
-            int min_eff = pq.top()[0], i = pq.top()[1], j = pq.top()[2];
-            vis.insert(make_pair(i, j));
-            pq.pop();
+            auto cur = pq.top(); pq.pop();
+            int diff = get<0>(cur), x = get<1>(cur), y = get<2>(cur);
+            vis[x][y] = true;
             
             for(auto &dir : dirs) {
-                int di = dir.first + i, dj = dir.second + j;
+                int dx = x + dir.first, dy = y + dir.second;
                 
-                if(bound(di, dj) && vis.find(make_pair(di, dj)) == vis.end()) {
-                    int cur_max_diff = max(min_eff, abs(heights[i][j] - heights[di][dj]));
-                    if(cur_max_diff < dp[di][dj]) {
-                        dp[di][dj] = cur_max_diff;
-                        pq.push({cur_max_diff, di, dj});
+                if(dx >= 0 && dx < m && dy >= 0 && dy < n && !vis[dx][dy]) {
+                    int ndiff = max(diff, abs(heights[x][y] - heights[dx][dy]));
+                    
+                    if(ndiff < dp[dx][dy]) {
+                        dp[dx][dy] = ndiff;
+                        pq.push({ndiff, dx, dy});
                     }
                 }
             }
         }
+        
         return dp[m - 1][n - 1];
     }
 };
