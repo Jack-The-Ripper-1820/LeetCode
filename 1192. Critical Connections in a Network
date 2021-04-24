@@ -1,45 +1,39 @@
 class Solution {
-    vector<vector<int>> ans, g;
-    vector<int> low, disc, parent;
-    int time = 0;
+    vector<vector<int>> g;
+    int time;
+    vector<int> vtime, low;
+    vector<vector<int>> ans;
+    vector<bool> vis;
     
-    void dfs(int &node) {
-        if(disc[node] != -1)
-            return;
+    void dfs(int cur, int par) {
+        vis[cur] = true;
+        vtime[cur] = low[cur] = ++time;
         
-        low[node] = time;
-        disc[node] = time++;
-        
-        for(int &neigh : g[node]) {
-            if(disc[neigh] == -1) {
-                parent[neigh] = node;
-                dfs(neigh);
+        for(int neigh : g[cur]) {
+            if(neigh == par) continue;
+            
+            if(!vis[neigh]) {
+                dfs(neigh, cur);
+                low[cur] = min(low[cur], low[neigh]);
                 
-                low[node] = min(low[neigh], low[node]);
-                if(low[neigh] > disc[node])
-                    ans.push_back({neigh, node});
+                if(vtime[cur] < low[neigh])
+                    ans.push_back({cur, neigh});
             }
             
-            else if(parent[node] != neigh)
-                low[node] = min(low[node], disc[neigh]);
+            else//backedge other than the edge of parent found
+                low[cur] = min(low[cur], vtime[neigh]);
         }
     }
 public:
     vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
-        g = vector<vector<int>>(n);
-        for(auto &x : connections) {
-            g[x[0]].push_back(x[1]);
-            g[x[1]].push_back(x[0]);
-        }
+        g.resize(n);
+        vtime.resize(n), low.resize(n), vis.resize(n);
+        time = 0;
         
-        low = vector<int>(n, -1);
-        disc = vector<int>(n, -1);
-        parent = vector<int>(n, -1);
+        for(auto &x : connections)
+            g[x[0]].push_back(x[1]), g[x[1]].push_back(x[0]);
         
-        for(int i = 0; i < n; i++) {
-            if(disc[i] == -1)
-                dfs(i);
-        }
+        dfs(0, -1);
         
         return ans;
     }
