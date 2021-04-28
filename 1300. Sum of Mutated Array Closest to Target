@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int findBestValue(vector<int>& arr, int target) {
+        sort(arr.begin(), arr.end());
+        int n = arr.size();
+        
+        for(int i = 0; i < arr.size(); i++) {
+            int x = target / (n - i);
+            
+            x = target - x * (n - i) > (x + 1) * (n - i) - target ? x + 1 : x;
+            
+            if(x < arr[i])
+                return x;
+            
+            target -= arr[i];
+        }
+        
+        return arr.back();
+    }
+};
