@@ -1,3 +1,31 @@
+//intuitive sliding window
+class Solution {
+public:
+    int maxScore(vector<int>& cardPoints, int k) {
+        int l = 0, r = 0, n = cardPoints.size();
+        int total = accumulate(cardPoints.begin(), cardPoints.end(), 0);
+        if(n == k)
+            return total;
+        
+        int s = 0, ans = INT_MAX;
+        
+        while(r < n) {
+            s += cardPoints[r];
+            
+            while(r - l + 1 > n - k)
+                s -= cardPoints[l], l++;
+            
+            if(r - l + 1 == n - k)
+                ans = min(ans, s);
+            
+            r++;
+        }
+        
+        return total - ans;
+    }
+};
+
+//concise
 class Solution {
 public:
     int maxScore(vector<int>& cardPoints, int k) {
