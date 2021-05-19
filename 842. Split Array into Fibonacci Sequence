@@ -1,0 +1,39 @@
+class Solution {
+    vector<int> ans;
+    
+    bool helper(string &s, int ind, vector<int> &cac) {
+        if(ind >= s.length() and cac.size() >= 3) {
+            ans = cac;
+            return true;
+        }
+        
+        bool f = false;
+        
+        for(int i = ind; i < s.length(); i++) {
+            string t = s.substr(ind, i - ind + 1);
+            
+            if(t.empty()) continue;
+            
+            long cur = stol(t);
+            
+            if(cur > INT_MAX or (s[ind] == '0' and t.length() > 1))
+                return false;
+            
+            if(cac.size() < 2 or (long)cac.back() + (long)cac[cac.size() - 2] == cur) {
+                cac.push_back(cur);
+                
+                f = f or helper(s, i + 1, cac);
+            
+                cac.pop_back();
+            }
+        }
+        
+        return f;
+    }
+public:
+    vector<int> splitIntoFibonacci(string num) {
+        vector<int> cac;
+        helper(num, 0, cac);
+        return ans;
+    }
+};
