@@ -7,16 +7,13 @@ class Solution {
             return true;
         }
         
+        long cur = 0;
         bool f = false;
         
         for(int i = ind; i < s.length(); i++) {
-            string t = s.substr(ind, i - ind + 1);
+            cur = cur * 10 + s[i] - '0';
             
-            if(t.empty()) continue;
-            
-            long cur = stol(t);
-            
-            if(cur > INT_MAX or (s[ind] == '0' and t.length() > 1))
+            if(cur > INT_MAX or (s[ind] == '0' and i > ind))
                 return false;
             
             if(cac.size() < 2 or (long)cac.back() + (long)cac[cac.size() - 2] == cur) {
