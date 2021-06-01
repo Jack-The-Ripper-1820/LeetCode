@@ -1,3 +1,37 @@
+class Solution {
+    int m, n;
+    vector<pair<int, int>> dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    
+    int dfs(vector<vector<int>> &grid, int x, int y) {    
+        int ans = 1;
+        grid[x][y] = 0;
+        
+        for(auto &dir : dirs) {
+            int dx = x + dir.first, dy = y + dir.second;
+            
+            if(dx >= 0 and dx < m and dy >= 0 and dy < n and grid[dx][dy])
+                ans += dfs(grid, dx, dy);
+        }
+        
+        return ans;
+    }
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        m = grid.size(), n = grid[0].size();
+        int ans = 0;
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j])
+                    ans = max(ans, dfs(grid, i, j));
+            }
+        }
+        
+        return ans;
+    }
+};
+
+
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
         m, n = len(grid), len(grid[0])
