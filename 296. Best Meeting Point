@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int minTotalDistance(vector<vector<int>>& grid) {
+        vector<pair<int, int>> ones;
+        int m = grid.size(), n = grid[0].size();
+        const int INF = 1e9 + 7;
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j])
+                    ones.push_back({i, j});
+            }
+        }
+        
+        int ans = INF;
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                int t = 0;
+                for(auto &x : ones)
+                    t += abs(x.first - i) + abs(x.second - j);
+                ans = min(ans, t);
+            }
+        }
+        
+        return ans;
+    }
+};
