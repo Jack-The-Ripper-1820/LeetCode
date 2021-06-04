@@ -4,6 +4,49 @@ public:
         unordered_set<string> vis(deadends.begin(), deadends.end());
         string start = "0000";
         
+        if(vis.find(start) != vis.end() or vis.find(target) != vis.end())
+            return -1;
+        
+        queue<string> q;
+        q.push(start);
+        int ans = 0;
+        vis.insert(start);
+        
+        while(not q.empty()) {
+            int s = q.size();
+            
+            while(s--) {
+                string cur = q.front(); q.pop();
+                if(cur == target) return ans;
+
+                for(int i = 0; i < 4; i++) {
+                    char prev = cur[i];
+
+                    cur[i] = prev + 1 > '9' ? '0' : prev + 1;
+                    if(cur == target) return ans + 1;
+                    if(vis.find(cur) == vis.end()) q.push(cur), vis.insert(cur);
+
+                    cur[i] = prev - 1 < '0' ? '9' : prev - 1;
+                    if(cur == target) return ans + 1;
+                    if(vis.find(cur) == vis.end()) q.push(cur), vis.insert(cur);
+
+                    cur[i] = prev;
+                }
+            }
+            
+            ans++;
+        }
+        
+        return -1;
+    }
+};
+
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) {
+        unordered_set<string> vis(deadends.begin(), deadends.end());
+        string start = "0000";
+        
         if(vis.find(start) != vis.end())
             return -1;
         
