@@ -4,22 +4,19 @@ public:
         priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq(intervals.begin(), intervals.end());
         vector<vector<int>> ans;
         
-        while(!pq.empty() && pq.size() > 1) {
-            auto a = pq.top(); pq.pop();
-            auto b = pq.top(); pq.pop();
-            if(b[0] <= a[1])
-                pq.push({a[0], max(a[1], b[1])});
+        while(pq.size() > 1) {
+            auto cur = pq.top(); pq.pop();
+            auto next = pq.top(); pq.pop();
+            int minm = cur[0], maxm = max(cur[1], next[1]);
             
-            else {
-                ans.push_back(a);
-                pq.push(b);
-            }
+            if(cur[1] >= next[0])
+                pq.push({minm, maxm});
+            
+            else
+                ans.push_back({cur[0], cur[1]}), pq.push(next);
         }
         
-        while(!pq.empty()) {
-            ans.push_back(pq.top());
-            pq.pop();
-        }
+        if(not pq.empty()) ans.push_back(pq.top());
         
         return ans;
     }
