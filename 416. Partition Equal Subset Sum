@@ -1,0 +1,23 @@
+class Solution {
+    vector<unordered_map<int, int>> mp;
+    
+    bool helper(vector<int> const& arr, int i, int s, int const& tot) {
+        if(i >= arr.size() or s > tot / 2)
+            return false;
+        
+        if(mp[i].find(s) != mp[i].end())
+            return mp[i][s];
+        
+        return mp[i][s] = (s == tot / 2) or helper(arr, i + 1, s + arr[i], tot) or helper(arr, i + 1, s, tot);
+    }
+public:
+    bool canPartition(vector<int>& nums) {
+        int tot = accumulate(nums.begin(), nums.end(), 0);
+        
+        if(tot % 2 != 0) return false;
+        
+        mp.resize(nums.size());
+        
+        return helper(nums, 0, 0, tot);
+    }
+};
