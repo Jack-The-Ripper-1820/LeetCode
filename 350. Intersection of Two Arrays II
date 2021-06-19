@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        if(nums1.size() < nums2.size())
+            return intersect(nums2, nums1);
+        
+        unordered_map<int, int> a, b;
+        for(int &x : nums1) a[x]++;
+        for(int &x : nums2) b[x]++;
+        
+        vector<int> ans;
+        
+        for(auto &[k, x] : a) {
+            if(x and b[k]) {
+                for(int i = 0; i < min(x, b[k]); i++)
+                    ans.push_back(k);
+            }
+        }
+        
+        return ans;
+    }
+};
