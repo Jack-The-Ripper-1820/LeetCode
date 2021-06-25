@@ -34,7 +34,7 @@ public:
         for(auto &x : edges)
             g[x[0]].push_back(x[1]), g[x[1]].push_back(x[0]);
         
-        vtime.resize(n + 1), low.resize(n + 1), vis.resize(n + 1, false);
+        vtime.resize(n + 1), low.resize(n + 1), vis.resize(n + 1, false), time = 0;
         
         for(int i = 1; i <= n; i++) {
             if(not vis[i])
