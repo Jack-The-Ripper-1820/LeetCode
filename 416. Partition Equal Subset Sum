@@ -1,23 +1,28 @@
 class Solution {
-    vector<unordered_map<int, int>> mp;
+    vector<unordered_map<int, int>> dp;
     
-    bool helper(vector<int> const& arr, int i, int s, int const& tot) {
-        if(i >= arr.size() or s > tot / 2)
+    bool helper(vector<int> const& nums, int ind, int s, int const& total) {
+        if(s == total)
+            return true;
+        
+        if(ind >= nums.size() or s > total)
             return false;
         
-        if(mp[i].find(s) != mp[i].end())
-            return mp[i][s];
+        if(dp[ind].find(s) != dp[ind].end())
+            return dp[ind][s];
         
-        return mp[i][s] = (s == tot / 2) or helper(arr, i + 1, s + arr[i], tot) or helper(arr, i + 1, s, tot);
+        return dp[ind][s] = helper(nums, ind + 1, s + nums[ind], total) or helper(nums, ind + 1, s, total);
     }
 public:
     bool canPartition(vector<int>& nums) {
-        int tot = accumulate(nums.begin(), nums.end(), 0);
+        int s = accumulate(nums.begin(), nums.end(), 0);
         
-        if(tot % 2 != 0) return false;
+        if(s % 2)
+            return false;
         
-        mp.resize(nums.size());
+        s /= 2;
+        dp.resize(nums.size());
         
-        return helper(nums, 0, 0, tot);
+        return helper(nums, 0, 0, s);
     }
 };
