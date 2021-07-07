@@ -34,17 +34,14 @@ public:
 class Solution {
 public:
     int kthSmallest(vector<vector<int>>& matrix, int k) {
-        int n = matrix.size();
-        int l = matrix[0][0], r = matrix[n - 1][n - 1];
+        int m = matrix.size(), n = matrix[0].size(), l = matrix[0][0], r = matrix[m - 1][n - 1];
         
         while(l < r) {
             int mid = (l + r) >> 1;
             int steps = 0;
             
-            for(auto &x : matrix) {
-                int j = upper_bound(x.begin(), x.end(), mid) - x.begin();
-                steps += j;
-            }
+            for(auto &x : matrix)
+                steps += (upper_bound(x.begin(), x.end(), mid) - x.begin());
             
             if(steps < k)
                 l = mid + 1;
