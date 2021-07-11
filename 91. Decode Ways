@@ -1,0 +1,28 @@
+class Solution {
+    vector<int> dp;
+    
+    int helper(string const& s, int ind) {
+        if(ind >= s.length())
+            return 1;
+        
+        if(dp[ind] != -1)
+            return dp[ind];
+        
+        int ans = 0;
+        
+        if(s[ind] - '0' >= 1)
+            ans += helper(s, ind + 1);
+        
+        int x = stoi(s.substr(ind, 2));
+        
+        if(x >= 10 and x <= 26)
+            ans += helper(s, ind + 2);
+        
+        return dp[ind] = ans;
+    }
+public:
+    int numDecodings(string s) {
+        dp.resize(s.length(), -1);
+        return helper(s, 0);
+    }
+};
