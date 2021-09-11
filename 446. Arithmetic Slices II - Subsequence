@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int numberOfArithmeticSlices(vector<int>& nums) {
+        int n = nums.size(), ans = 0;
+        
+        vector<unordered_map<long, int>> dp(n); //dp[index][cd] = max length subsequence ends at j with common difference = cd
+        
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < i; j++) {
+                long d = (long)nums[i] - (long)nums[j];
+                
+                if(d < INT_MIN or d >= INT_MAX) continue;
+                
+                dp[i][d] += 1;
+                
+                if(dp[i].find(d) != dp[i].end())
+                    dp[i][d] += dp[j][d], ans += dp[j][d];
+            }
+        }
+        
+        return ans;
+    }
+};
