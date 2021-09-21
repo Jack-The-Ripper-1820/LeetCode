@@ -4,10 +4,10 @@ public:
         sort(arr.begin(), arr.end());
         int n = arr.size();
         
-        for(int i = 0; i < arr.size(); i++) {
+        for(int i = 0; i < n; i++) {
             int x = target / (n - i);
             
-            x = target - x * (n - i) > (x + 1) * (n - i) - target ? x + 1 : x;
+            x = abs(target - x * (n - i)) > abs(target - (x + 1) * (n - i)) ? x + 1 : x;
             
             if(x < arr[i])
                 return x;
