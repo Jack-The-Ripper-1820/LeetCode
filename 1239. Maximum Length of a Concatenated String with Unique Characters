@@ -1,0 +1,39 @@
+class Solution {
+    vector<map<vector<int>, int>> dp;
+    
+    int helper(vector<string> &arr, int ind, vector<int> &freq) {
+        if(ind >= arr.size()) return 0;
+        
+        if(dp[ind].find(freq) != dp[ind].end())
+            return dp[ind][freq];
+        
+        int ans = 0;
+        
+        vector<int> tmp;
+        
+        for(int i = ind; i < arr.size(); i++) {
+            bool f = true;
+            tmp = freq;
+            
+            for(char x : arr[i]) {
+                tmp[x - 'a']++;
+                
+                if(tmp[x - 'a'] > 1) {
+                    f = false;
+                    break;
+                }
+            }
+            
+            if(f)
+                ans = max(ans, (int)(arr[i].size() + helper(arr, i + 1, tmp)));
+        }
+        
+        return dp[ind][freq] = ans;
+    }
+public:
+    int maxLength(vector<string>& arr) {
+        dp.resize(arr.size());
+        vector<int> freq(26);
+        return helper(arr, 0, freq);
+    }
+};
