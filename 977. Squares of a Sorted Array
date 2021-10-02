@@ -38,3 +38,24 @@ public:
         return squared(ans); 
     }
 };
+
+
+class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        int l = 0, r = nums.size() - 1, ind = r;
+        vector<int> ans(r + 1);
+        
+        while(l <= r) {
+            int a = nums[l] * nums[l], b = nums[r] * nums[r];
+            
+            if(a >= b)
+                ans[ind--] = a, l++;
+            
+            else
+                ans[ind--] = b, r--;
+        }
+        
+        return ans;
+    }
+};
