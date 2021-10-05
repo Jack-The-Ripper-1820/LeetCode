@@ -27,7 +27,7 @@ public:
     }
 };
 
-//linear bottom up dp
+//greedy
 class Solution {
 public:
     int wiggleMaxLength(vector<int>& nums) {
@@ -48,5 +48,37 @@ public:
         }
         
         return len;
+    }
+};
+
+class Solution {
+    vector<vector<int>> dp;
+    
+    int helper(vector<int> &nums, int ind, int prevd) {
+        if(ind >= nums.size())
+            return 0;
+        
+        int j = (prevd > 0) ? 1 : (prevd < 0 ? 2 : 0);
+        
+        if(dp[ind][j] != -1)
+            return dp[ind][j];
+        
+        int ans = 1;
+        
+        for(int i = ind + 1; i < nums.size(); i++) {
+            int d = nums[i] - nums[ind];
+            
+            if(d == 0) continue;
+            
+            if(ind == 0 or (prevd > 0 and d < 0) or (prevd < 0 and d > 0))
+                ans = max(ans, helper(nums, i, d) + 1);
+        }
+        
+        return dp[ind][j] = ans;
+    }
+public:
+    int wiggleMaxLength(vector<int>& nums) {
+        dp.resize(nums.size(), vector<int>(3, -1));
+        return helper(nums, 0, 0);
     }
 };
