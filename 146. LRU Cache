@@ -1,7 +1,6 @@
 class LRUCache {
     list<pair<int, int>> dl; //list to hold key value pairs, recent one at the beginning
     unordered_map<int, list<pair<int, int>>::iterator> mp; //map to hold key and its respective iterator inside the list to delete whenever necessary
-    
     int cap;
 public:
     LRUCache(int capacity) {
@@ -10,32 +9,33 @@ public:
     
     int get(int key) {
         auto it = mp.find(key);
+        int ret = -1;
+        
         if(it != mp.end()) {
-            auto del = mp[key];
-            int val = del->second;
+            auto del = it->second;
+            ret = del->second;
             dl.erase(del);
-            dl.push_front({key, val});
+            
+            dl.push_front({key, ret});
             mp[key] = dl.begin();
-            return val;
         }
-        return -1;
+        
+        return ret;
     }
     
     void put(int key, int value) {
-        if(mp.find(key) != mp.end()) {
-            auto del = mp[key];
-            dl.erase(del);
-        }
+        auto it = mp.find(key);
         
-        else if(cap == 0) { //remove the last element of dl
-            auto it = dl.rbegin();
-            int delk = it->first;
-            mp.erase(delk);
+        if(it != mp.end())
+            dl.erase(it->second);
+        
+        else if(cap == 0) {
+            int del = dl.back().first;
+            mp.erase(del);
             dl.pop_back();
         }
         
-        else
-            cap -= 1;
+        else cap--;
         
         dl.push_front({key, value});
         mp[key] = dl.begin();
