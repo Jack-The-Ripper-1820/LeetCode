@@ -8,18 +8,14 @@ public:
         sort(boxTypes.begin(), boxTypes.end(), comp);
         int ans = 0;
         
-        for(int i = 0; i < boxTypes.size(); i++) {
+        for(auto &x : boxTypes) {
             if(truckSize == 0) break;
             
-            if(truckSize >= boxTypes[i][0]) {
-                ans += boxTypes[i][0] * boxTypes[i][1];
-                truckSize -= boxTypes[i][0];
-            }
+            if(truckSize >= x[0])
+                ans += x[0] * x[1], truckSize -= x[0];
             
-            else {
-                ans += truckSize * boxTypes[i][1];
-                truckSize = 0;
-            }
+            else
+                ans += truckSize * x[1], truckSize = 0;
         }
         
         return ans;
