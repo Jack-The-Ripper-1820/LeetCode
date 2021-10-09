@@ -48,3 +48,38 @@ public:
         return grid;
     }
 };
+
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        
+        int m = matrix.size(), n = matrix[0].size();
+        vector<vector<int>> ans(m, vector<int>(n, INT_MAX));
+        vector<pair<int, int>> dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        
+        queue<pair<int, int>> q;
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(matrix[i][j] == 0)
+                    ans[i][j] = 0, q.push({i, j});
+            }
+        }
+        
+        while(not q.empty()) {
+            auto cur = q.front(); q.pop();
+            int x = cur.first, y = cur.second;
+            
+            for(auto &dir : dirs) {
+                int dx = x + dir.first, dy = y + dir.second;
+                
+                if(dx >= 0 and dx < m and dy >= 0 and dy < n) {
+                    if(ans[dx][dy] > ans[x][y] + 1)
+                        ans[dx][dy] = ans[x][y] + 1, q.push({dx, dy});
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
