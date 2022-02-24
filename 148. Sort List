@@ -10,46 +10,39 @@
  * };
  */
 class Solution {
-    ListNode* merge(ListNode* l1, ListNode* l2) {
-        ListNode *temp1 = l1, *temp2 = l2;
-        ListNode *ans = new ListNode();
-        ListNode *res = ans;
-        while(temp1 != NULL && temp2 != NULL) {
-            if(temp1->val < temp2->val) {
-                res->next = temp1;
-                temp1 = temp1->next;
-            }
-            else {
-                res->next = temp2;
-                temp2 = temp2->next;
-            }
-            res = res->next;
+    ListNode* merge(ListNode* left, ListNode* right) {
+        ListNode* lp = left, *rp = right, *ret = new ListNode(), *rtp = ret;
+        
+        while(lp and rp) {
+            if(lp->val < rp->val)
+                rtp->next = lp, lp = lp->next;
+            
+            else
+                rtp->next = rp, rp = rp->next;
+            
+            rtp = rtp->next;
         }
-        while(temp1 != NULL) {
-            res->next = temp1;
-            res = res->next;
-            temp1 = temp1->next;
-        }
-        while(temp2 != NULL) {
-            res->next = temp2;
-            res = res->next;
-            temp2 = temp2->next;
-        }
-        return ans->next;
+        
+        while(lp)
+            rtp->next = lp, lp = lp->next, rtp = rtp->next;
+        
+        while(rp)
+            rtp->next = rp, rp = rp->next, rtp = rtp->next;
+        
+        return ret->next;
     }
 public:
     ListNode* sortList(ListNode* head) {
-        if(not head or not head->next)
-            return head;
+        if(not head or not head->next) return head;
         
-        ListNode *slow = head, *fast = head, *prev;
+        ListNode* slow = head, *fast = head, *prev = nullptr;
+        
         while(fast and fast->next)
             prev = slow, slow = slow->next, fast = fast->next->next;
         
         prev->next = nullptr;
         
-        ListNode* left = sortList(head);
-        ListNode* right = sortList(slow);
+        ListNode* left = sortList(head), *right = sortList(slow);
         
         return merge(left, right);
     }
