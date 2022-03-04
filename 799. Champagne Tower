@@ -8,8 +8,7 @@ public:
             for(int j = 0; j <= query_glass; j++) {
                 if(dp[i][j] > 1) {
                     double rem = dp[i][j] - 1;
-                    dp[i + 1][j] += rem / 2;
-                    dp[i + 1][j + 1] += rem / 2;
+                    dp[i + 1][j] += rem / 2, dp[i + 1][j + 1] += rem / 2;
                 }
             }
         }
