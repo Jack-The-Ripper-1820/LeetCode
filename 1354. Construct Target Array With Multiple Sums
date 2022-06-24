@@ -1,6 +1,37 @@
 class Solution {
 public:
     bool isPossible(vector<int>& target) {
+    //video reference - https://www.youtube.com/watch v=wTwKzSOthEM&ab_channel=HappyCoding
+        if(target.size()== 1)
+            return target[0] == 1;
+        
+        long s = 0;
+        for(int &x : target)
+            s += x;
+        
+        priority_queue<int> pq(target.begin(), target.end());
+        
+        while(not pq.empty() and pq.top() > 1) {
+            int maxElem = pq.top(); pq.pop();
+            int remain = s - maxElem;
+            
+            if(remain == 1) return true;
+            
+            int prev = maxElem % remain;
+            
+            if(prev < 1 or prev == maxElem)
+                return false;
+            
+            pq.push(prev);
+            s = s - maxElem + prev;
+        }
+        
+        return true;
+    }
+};
+class Solution {
+public:
+    bool isPossible(vector<int>& target) {
         //video reference - https://www.youtube.com/watch v=wTwKzSOthEM&ab_channel=HappyCoding
         
         long s = 0;
