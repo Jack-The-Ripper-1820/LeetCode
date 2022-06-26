@@ -1,3 +1,23 @@
+class Solution {
+public:
+    int maxScore(vector<int>& cardPoints, int k) {
+         int n = cardPoints.size();
+        vector<int> sum(n + 1);
+        
+        for(int i = 1; i < n + 1; i++)
+            sum[i] = sum[i - 1] + cardPoints[i - 1];
+        
+        int ans = INT_MAX, total = sum[n];
+        
+        for(int i = 0; i < k + 1; i++) {
+            int s = sum[i + n - k] - sum[i];
+            ans = min(ans, s);
+        }
+        
+        return total - ans;
+    }
+};
+
 //intuitive sliding window
 class Solution {
 public:
