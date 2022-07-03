@@ -82,3 +82,35 @@ public:
         return helper(nums, 0, 0);
     }
 };
+
+class Solution {
+    int dp[1001][3];
+    
+    int helper(vector<int> const& nums, int ind, int prevd) {
+        if(ind >= nums.size())
+            return 0;
+        
+        int j = prevd > 0 ? 1 : prevd < 0 ? 2 : 0;
+        
+        if(dp[ind][j] != -1)
+            return dp[ind][j];
+        
+        int ans = 1;
+        
+        for(int i = ind + 1; i < nums.size(); i++) {
+            int diff = nums[i] - nums[ind];
+            
+            if(diff == 0) continue;
+            
+            if(ind == 0 or prevd * diff < 0)
+                ans = max(ans, helper(nums, i, diff) + 1);
+        }
+        
+        return dp[ind][j] = ans;
+    }
+public:
+    int wiggleMaxLength(vector<int>& nums) {
+        memset(dp, -1, sizeof(dp));
+        return helper(nums, 0, 0);
+    }
+};
