@@ -1,4 +1,37 @@
 class Solution {
+    int helper(vector<string> const& arr, vector<int> &cnt, int ind) {
+        if(ind >= arr.size())
+            return 0;
+        
+        int ans = helper(arr, cnt, ind + 1);
+        string word = arr[ind];
+        bool f = true;
+        
+        for(int i = 0; i < word.length(); i++) {
+            cnt[word[i] - 'a']++;
+            
+            if(cnt[word[i] - 'a'] > 1)
+                f = false;
+        }
+        
+        if(f) {
+            ans = max(ans, (int)word.length() + helper(arr, cnt, ind + 1));
+        }
+        
+        for(int i = 0; i < word.length(); i++) {
+            cnt[word[i] - 'a']--;
+        }
+        
+        return ans;
+    }
+public:
+    int maxLength(vector<string>& arr) {
+        vector<int> cnt(26);
+        return helper(arr, cnt, 0);
+    }
+};
+
+class Solution {
     vector<map<vector<int>, int>> dp;
     
     int helper(vector<string> &arr, int ind, vector<int> &freq) {
