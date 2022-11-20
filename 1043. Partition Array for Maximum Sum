@@ -1,3 +1,29 @@
+class Solution {
+    int dp[501];
+    
+    int helper(vector<int> const& arr, int const& k, int ind) {
+        if(ind >= arr.size())
+            return 0;
+        
+        if(dp[ind] != -1)
+            return dp[ind];
+        
+        int curmax = 0, ans = 0;
+        
+        for(int i = ind, len = 1; i < ind + k and i < arr.size(); i++, len++) {
+            curmax = max(curmax, arr[i]);
+            ans = max(ans, helper(arr, k, i + 1) + len * curmax);
+        }
+        
+        return dp[ind] = ans;
+    }
+public:
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        memset(dp, -1, sizeof(dp));
+        return helper(arr, k, 0);
+    }
+};
+
 class Solution:
     def maxSumAfterPartitioning(self, arr: List[int], k: int) -> int:
         dp = [-1] * len(arr)
