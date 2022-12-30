@@ -1,5 +1,38 @@
 class Solution {
     vector<vector<int>> ans;
+    int n;
+    vector<bool> vis;
+
+    void dfs(vector<vector<int>> &g, vector<int> &tmp, int cur) {
+        tmp.push_back(cur);
+        vis[cur] = true;
+
+        if(cur == n - 1) {
+            ans.push_back(tmp);
+        }
+
+        for(int neigh : g[cur]) {
+            if(not vis[neigh])
+                dfs(g, tmp, neigh);
+        }
+
+        vis[cur] = false;
+        tmp.pop_back();
+    }
+public:
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        n = graph.size();
+        vis.assign(n, false);
+        vector<int> tmp;
+
+        dfs(graph, tmp, 0);
+
+        return ans;
+    }
+};
+
+class Solution {
+    vector<vector<int>> ans;
     vector<bool> vis;
     vector<int> path;
     int n;
