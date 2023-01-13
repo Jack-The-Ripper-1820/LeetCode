@@ -1,4 +1,49 @@
-1254. class Solution {
+class Solution {
+    vector<pair<int, int>> dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    int m, n;
+    
+    void dfs(vector<vector<int>> &grid, int x, int y) {
+        for(auto &dir : dirs) {
+            int dx = dir.first + x;
+            int dy = dir.second + y;
+            
+            if(dx >= 0 and dx < m and dy >= 0 and dy < n and grid[dx][dy] == 0)
+                grid[dx][dy] = 1, dfs(grid, dx, dy);
+        }
+    }
+public:
+    int closedIsland(vector<vector<int>>& grid) {
+        int ans = 0;
+        m = grid.size(), n = grid[0].size();
+        
+        for(int i = 0; i < m; i++) {
+            if(grid[i][0] == 0)
+                grid[i][0] = 1, dfs(grid, i, 0);
+            
+            if(grid[i][n - 1] == 0)
+                grid[i][n - 1] = 1, dfs(grid, i, n - 1);
+        }
+        
+        for(int j = 0; j < n; j++) {
+            if(grid[0][j] == 0)
+                grid[0][j] = 1, dfs(grid, 0, j);
+            
+            if(grid[m - 1][j] == 0)
+                grid[m - 1][j] = 1, dfs(grid, m - 1, j);
+        }
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j] == 0)
+                    grid[i][j] = 1, dfs(grid, i, j), ans++;
+            }
+        }
+        
+        return ans;
+    }
+};
+
+class Solution {
     int m, n;
     vector<vector<bool>> vis;
     vector<pair<int, int>> dirs = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
