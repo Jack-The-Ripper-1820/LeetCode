@@ -1,6 +1,30 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> mp;
+        int l = 0, n = s.length(), ans = 0;
+
+        for(int r = 0; r <  n; r++) {
+            mp[s[r]]++;
+
+            while(l < r and mp[s[r]] > 1) {
+                mp[s[l]]--;
+                if(mp[s[l]] == 0) mp.erase(s[l]);
+                l++;
+            }
+
+            // cout << r << " " << l << endl;
+
+            ans = max(ans, r - l + 1);
+        }
+
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
         if(s.empty())
             return 0;
         
