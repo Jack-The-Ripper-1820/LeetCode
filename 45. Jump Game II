@@ -1,43 +1,16 @@
-//recursive dp
-class Solution {
-    vector<int> dp;
-    int helper(vector<int> const& nums, int ind) {
-        if(ind >= nums.size())
-            return INT_MAX / 2;
-        
-        if(ind == nums.size() - 1)
-            return 0;
-        
-        if(dp[ind] != -1)
-            return dp[ind];
-        
-        int ans = INT_MAX / 2;
-        for(int i = nums[ind]; i > 0; i--)
-            ans = min(ans, helper(nums, ind + i) + 1);
-        return dp[ind] = ans;
-    }
-public:
-    int jump(vector<int>& nums) {
-        dp = vector<int>(nums.size(), -1);
-        return helper(nums, 0);
-    }
-};
-
-//recursive consise dp
 class Solution {
     vector<int> dp;
     int helper(vector<int> &nums, int ind) {
-        if(ind >= nums.size() - 1)
-            return 0;
-        
-        if(dp[ind] != -1)
-            return dp[ind];
-        
+        if(ind >= (int)nums.size() - 1) return 0;
+
+        if(dp[ind] != -1) return dp[ind];
+
         int ans = INT_MAX / 2;
-        
-        for(int i = 1; i <= nums[ind]; i++)
-            ans = min(ans, helper(nums, ind + i) + 1);
-        
+
+        for(int i = ind + 1; i <= nums[ind] + ind; i++) {
+            ans = min(ans, 1 + helper(nums, i));
+        }
+
         return dp[ind] = ans;
     }
 public:
