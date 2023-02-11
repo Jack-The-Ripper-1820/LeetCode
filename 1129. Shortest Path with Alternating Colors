@@ -1,41 +1,43 @@
 class Solution {
 public:
-    vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& red_edges, vector<vector<int>>& blue_edges) {
+    vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& redEdges, vector<vector<int>>& blueEdges) {
         vector<vector<pair<int, int>>> g(n);
-        
-        for(auto &x : red_edges)
-            g[x[0]].push_back({x[1], 0});
-        
-        for(auto &x : blue_edges)
-            g[x[0]].push_back({x[1], 1});
-        
-        vector<int> ans;
-        
-        vector<vector<int>> dist(n, vector<int>(2, -1));
+        for(auto &edge : redEdges)
+            g[edge[0]].push_back({edge[1], 0});
+
+        for(auto &edge : blueEdges)
+            g[edge[0]].push_back({edge[1], 1});
+
         queue<pair<int, int>> q;
         q.push({0, 0}), q.push({0, 1});
-        dist[0] = {0, 0};
-        
+        vector<vector<int>> dist(n, vector<int>(2, -1));
+        dist[0][0] = dist[0][1] = 0;
+
         while(not q.empty()) {
-            auto cur = q.front(); q.pop();
-            int node = cur.first, path = cur.second;
-            
-            for(auto &neigh : g[node]) {
-                int nn = neigh.first, dpath = neigh.second;
-                
-                if(dpath == path or dist[nn][dpath] != -1) continue;
-                
-                dist[nn][dpath] = dist[node][path] + 1;
-                q.push({nn, dpath});
+            int s = q.size();
+
+            while(s--) {
+                auto cur = q.front(); q.pop();
+                int curNode = cur.first, curEdge = cur.second;
+
+                for(auto &neigh : g[curNode]) {
+                    int neighNode = neigh.first, neighEdge = neigh.second;
+
+                    if(curEdge == neighEdge or dist[neighNode][neighEdge] != -1) continue;
+
+                    q.push({neighNode, neighEdge});
+                    dist[neighNode][neighEdge] = dist[curNode][curEdge] + 1;
+                }
             }
         }
-        
-        for(auto &x : dist) {
-            int mn = min(x[0], x[1]);
-            int mx = max(x[0], x[1]);
-            mn == -1 ? ans.push_back(mx) : ans.push_back(mn);
+
+        vector<int> ans(n);
+        for(int i = 0; i < n; i++) {
+            int mn = min(dist[i][0], dist[i][1]);
+            int mx = max(dist[i][0], dist[i][1]);
+            ans[i] = mn == -1 ? mx : mn;
         }
-        
+
         return ans;
     }
 };
