@@ -1,4 +1,3 @@
-//reservoir sampling
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -10,26 +9,25 @@
  * };
  */
 class Solution {
-    ListNode *head;
+    ListNode* head;
 public:
-    /** @param head The linked list's head.
-        Note that the head is guaranteed to be not null, so it contains at least one node. */
     Solution(ListNode* head) {
         this->head = head;
     }
     
-    /** Returns a random node's value. */
     int getRandom() {
-        int ret = -1, c = 0;
-        ListNode *temp = head;
-        
-        while(temp) {
-            if(rand() % (c + 1) == c)
-                ret = temp->val;
-            
-            temp = temp->next, c++;
+        int ret = -1, n = 0;
+        ListNode* cur = head;
+
+        while(cur) {
+            n++;
+
+            if(rand() % n == n - 1)
+                ret = cur->val;
+
+            cur = cur->next;
         }
-        
+
         return ret;
     }
 };
@@ -38,45 +36,4 @@ public:
  * Your Solution object will be instantiated and called as such:
  * Solution* obj = new Solution(head);
  * int param_1 = obj->getRandom();
- */
- 
- /**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
- * }
- */
-class Solution {
-    private ListNode head;
-    private Random rand;
-    
-    public Solution(ListNode head) {
-        this.head = head;
-        rand = new Random();
-    }
-    
-    public int getRandom() {
-        ListNode tmp = head;
-        int ret = -1, n = 0;
-        
-        while(tmp != null) {
-            if(rand.nextInt(n + 1) == n)
-                ret = tmp.val;
-            
-            tmp = tmp.next;
-            n++;
-        }
-        
-        return ret;
-    }
-}
-
-/**
- * Your Solution object will be instantiated and called as such:
- * Solution obj = new Solution(head);
- * int param_1 = obj.getRandom();
  */
