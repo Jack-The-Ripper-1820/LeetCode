@@ -1,5 +1,49 @@
 class Solution {
 public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        size_t m = mat.size(), n = mat[0].size();
+        vector<vector<bool>> vis(m, vector<bool>(n, false));
+        vector<pair<int, int>> dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        queue<pair<size_t, size_t>> q;
+
+        for(size_t i = 0; i < m; i++) {
+            for(size_t j = 0; j < n; j++) {
+                if(mat[i][j] == 0) {
+                    q.push({i, j});
+                    vis[i][j] = true;
+                }
+            }
+        }
+
+        vector<vector<int>> ans(m, vector<int>(n, 0));
+        int len = 0;
+
+        while(!q.empty()) {
+            int s = q.size();
+            while(s--) {
+                auto cur = q.front(); q.pop();
+                size_t x = cur.first, y = cur.second;
+
+                for(auto &dir : dirs) {
+                    int dx = x + dir.first, dy = y + dir.second;
+
+                    if(dx >= 0 && dx < m && dy >= 0 && dy < n && !vis[dx][dy]) {
+                        q.push({dx, dy});
+                        ans[dx][dy] = len + 1;
+                        vis[dx][dy] = true;
+                    }
+                }
+            }
+
+            len++;
+        }
+
+        return ans;
+    }
+};
+
+class Solution {
+public:
     vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
         
         int m = matrix.size(), n = matrix[0].size();
