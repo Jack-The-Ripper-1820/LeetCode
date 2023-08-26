@@ -1,7 +1,7 @@
 class Solution {
     vector<vector<int>> ans;
     
-    void helper(int const& n, int k, vector<int> tmp, int ind) {
+    void helper(int const& n, int k, vector<int> &tmp, int ind) {
         if(k == 0) {
             ans.push_back(tmp);
             return;
@@ -20,7 +20,8 @@ class Solution {
     }
 public:
     vector<vector<int>> combine(int n, int k) {
-        helper(n, k, {}, 1);
+        vector<int> tmp;
+        helper(n, k, tmp, 1);
         
         return ans;
     }
