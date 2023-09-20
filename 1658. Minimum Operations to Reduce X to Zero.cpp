@@ -1,6 +1,31 @@
 class Solution {
 public:
     int minOperations(vector<int>& nums, int x) {
+        int r = 0, l = 0, n = nums.size();
+        int s = 0, maxm = 0;
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        if(sum == x) return n;
+        int req = sum - x;
+
+        while(r < n) {
+            s += nums[r];
+
+            while(l < r && s > req) {
+                s -= nums[l++];
+            }
+
+            if(s == req) maxm = max(maxm, r - l + 1);
+
+            r++;
+        }
+
+        return maxm == 0 ? -1 : n - maxm;
+    }
+};
+
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int x) {
         unordered_map<int, int> mp;
         int s = 0, n = nums.size(), ans = 0;
         
