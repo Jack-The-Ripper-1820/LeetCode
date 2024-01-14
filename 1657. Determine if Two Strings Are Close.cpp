@@ -1,6 +1,53 @@
 class Solution {
 public:
     bool closeStrings(string word1, string word2) {
+        if(word1.length() != word2.length()) return false;
+
+        unordered_map<char, int> mp1, mp2;
+
+        for(char x : word1) mp1[x]++;
+        for(char x : word2) mp2[x]++;
+
+        if(mp1.size() != mp2.size()) return false;
+
+        vector<int> f1, f2;
+
+        for(char x = 'a'; x <= 'z'; x++) {
+            auto it1 = mp1.find(x);
+            auto it2 = mp2.find(x);
+
+            if(it1 != mp1.end() && it2 != mp2.end()) {
+                f1.push_back(it1->second);
+                f2.push_back(it2->second);
+            }
+
+            else if(it1 == mp1.end() && it2 == mp2.end()) {
+                continue;
+            }
+
+            else {
+                return false;
+            }
+        }
+
+        sort(f1.rbegin(), f1.rend());
+        sort(f2.rbegin(), f2.rend());
+
+        for(int i = 0; i < f1.size(); i++) {
+            if(f1[i] != f2[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+};
+
+
+
+class Solution {
+public:
+    bool closeStrings(string word1, string word2) {
         if(word1.length() != word2.length())
             return false;
         
