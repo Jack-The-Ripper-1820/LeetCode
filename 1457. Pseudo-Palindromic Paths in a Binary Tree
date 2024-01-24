@@ -10,32 +10,38 @@
  * };
  */
 class Solution {
+    unordered_map<int, int> freq;
     int ans = 0;
-    
-    void helper(TreeNode* root, unordered_map<int, int> &mp) {
-        if(not root->left and not root->right) {
-            mp[root->val]++;
-            int odds = 0;
-            for(auto &x : mp)
-                odds += (x.second % 2);
+
+    void helper(TreeNode* root) {
+        if(!root) return;
+
+        if(!root->left && !root->right) {
+            freq[root->val]++;
+
+            int cnt = 0;
+
+            for(auto &[k, v] : freq) {
+                if(v % 2 != 0) cnt++;
+                if(cnt > 1) break;
+            }
             
-            ans += (odds <= 1);
-            mp[root->val]--;
+            if(cnt <= 1) ans++;
+            
+            freq[root->val]--;
             return;
         }
         
-        mp[root->val]++;
-        
-        if(root->left) helper(root->left, mp);
-        if(root->right) helper(root->right, mp);
-        
-        mp[root->val]--;
+        freq[root->val]++;
+
+        helper(root->left);
+        helper(root->right);
+
+        freq[root->val]--;
     }
 public:
     int pseudoPalindromicPaths (TreeNode* root) {
-        if(not root) return 0;
-        unordered_map<int, int> mp;
-        helper(root, mp);
+        helper(root);
         return ans;
     }
 };
