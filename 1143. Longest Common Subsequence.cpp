@@ -1,4 +1,29 @@
-//c++
+// table
+class Solution {
+    int dp[1001][1001];
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        memset(dp, 0, sizeof(dp));
+        int m = text1.length(), n = text2.length();
+        
+        for(int i = m - 1; i >= 0; i--) {
+            for(int j = n - 1; j >= 0; j--) {                
+                if(text1[i] == text2[j]) {
+                    dp[i][j] = 1 + dp[i + 1][j + 1];
+                }
+
+                else {
+                    dp[i][j] = max(dp[i + 1][j], dp[i][j + 1]);
+                }
+            }
+        }
+
+        return dp[0][0];
+
+    }
+};
+
+// memoize
 class Solution {
 public:
     int helper(string const& text1, string const& text2, int i, int j, vector<vector<int>> &dp) {
@@ -18,20 +43,3 @@ public:
         return helper(text1, text2, 0, 0, dp);
     }
 };
-
-#python
-class Solution:
-    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
-        m, n = len(text1), len(text2)
-        
-        @lru_cache(None)
-        def helper(i, j):
-            if(i == m or j == n):
-                return 0
-            
-            if(text1[i] == text2[j]):
-                return 1 + helper(i + 1, j + 1)
-            
-            return max(helper(i + 1, j), helper(i, j + 1))
-        
-        return helper(0, 0)
