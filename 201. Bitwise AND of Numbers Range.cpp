@@ -18,12 +18,11 @@ public:
     }
 };
 
-//bitwise and
 class Solution {
 public:
     int rangeBitwiseAnd(int left, int right) {
         while(left < right)
-            right = right & (right - 1);
+            right = right & (right - 1); //make leftmost bit to 0 each time
         
         return right;
     }
