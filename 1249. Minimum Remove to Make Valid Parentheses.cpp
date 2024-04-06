@@ -1,6 +1,40 @@
 class Solution {
 public:
     string minRemoveToMakeValid(string s) {
+        int n = s.length();
+        vector<bool> arr(n, false);
+        stack<int> st;
+
+        for(int i = 0; i < n; i++) {
+            char x = s[i];
+            if(x == '(') 
+                arr[i] = true, st.push(i);
+
+            else if(x == ')') {
+                if(i > 0 && !st.empty() && s[st.top()] == '(') {
+                    arr[st.top()] = false;
+                    arr[i] = false;
+                    st.pop();
+                }
+
+                else arr[i] = true, st.push(i);
+            }
+        }
+
+        string ans;
+
+        for(int i = 0; i < n; i++) {
+            if(arr[i]) continue;
+            else ans.push_back(s[i]);
+        }
+
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    string minRemoveToMakeValid(string s) {
         string temp;
         stack<char> st;
         
